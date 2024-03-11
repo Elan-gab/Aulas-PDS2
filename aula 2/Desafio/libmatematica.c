@@ -1,4 +1,5 @@
 #include<math.h>
+#include"libmatematica.h"
 
 float calcular_seno(float angulo_radianos) {
 
