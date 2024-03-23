@@ -1,5 +1,5 @@
-#ifndef REQUISITOS_H
-#define REQUISITOS_H
+#ifndef BIBLIOTECA_AURORA_H
+#define BIBLIOTECA_AURORA_H
 
 #include "biblioteca-aurora.c" // arquivo de implementacao. contem o struct Livro
 
