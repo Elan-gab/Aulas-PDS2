@@ -1,7 +1,13 @@
-#ifndef BIBLIOTECA_AURORA_H
-#define BIBLIOTECA_AURORA_H
+#ifndef REQUISITOS_H
+#define REQUISITOS_H
 
-#include "biblioteca-aurora.c" // arquivo de implementacao. contem o struct Livro
+// ================== estruturas ==================
+
+typedef struct livro Livro;
+typedef struct reserva Reserva;
+typedef struct evento Evento;
+
+// ============== prototipo das funcoes ==============
 
 /**
  * @param id o numero identificador do livro

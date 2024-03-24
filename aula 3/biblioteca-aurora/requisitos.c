@@ -1,4 +1,5 @@
 #include<malloc.h>
+#include "requisitos.h"
 
 // ================== estruturas ==================
 
