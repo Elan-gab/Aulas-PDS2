@@ -1,6 +1,6 @@
 #include "circulo.h"
-#include "malloc.h"
-#include "math.h"
+#include <malloc.h>
+#include <math.h>
 #define PI 3.141592
 
 
