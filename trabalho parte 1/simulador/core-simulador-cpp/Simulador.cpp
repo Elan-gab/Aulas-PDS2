@@ -67,7 +67,7 @@ int Simulador::calcularVidaEquipe(int seletorDeEquipe)
     return soma;
 }
 
-Personagem* Simulador::proximoPersonagem(vector<Personagem*> equipe)
+Personagem* Simulador::proximoPersonagem(vector<Personagem*> equipe, int c)
 {
     int tamanho = equipe.size();
     if (tamanho == 0)
@@ -75,18 +75,12 @@ Personagem* Simulador::proximoPersonagem(vector<Personagem*> equipe)
         return nullptr;
     }
 
-    int contador = 0;
-    while (contador < tamanho)
-    {
-        if (equipe[contador]->getVida()>0)
-        {
-            return equipe[contador];
-        }
-        contador++;
+    // Define a semente baseada no numero de loops do simulador
+    std::srand(c);
 
-    }
+    int n = rand() % tamanho;
 
-    return nullptr;
+    return equipe[n];
 }
 
 int Simulador::criarCombate(Personagem* personagem1, Personagem* personagem2)
@@ -102,8 +96,9 @@ int Simulador::criarCombate(Personagem* personagem1, Personagem* personagem2)
 string Simulador::criarSaida(Personagem* personagem1, Personagem* personagem2, int dano)
 {
     string saida = "---------------------------------------------------------\n";
-    saida += "O personagem " + personagem1->getNome() + " irá atacar o " + personagem2->getNome() + "\n";
+    saida += "O personagem " + personagem1->getNome() + " irá atacar o personagem " + personagem2->getNome() + "\n";
     saida += "com a sua arma " + personagem1->getArmaAtaque()->getDescricaoArma() + "\n";
+    saida += personagem1->getArmaAtaque()->gerarRuidoAtaque() + "\n";
     saida += "Dano causado = " + std::to_string(dano) + "\n";
     saida += dano > 0 ? personagem1->getNome() + ": " : "";
     saida += dano > 0 ? personagem1->pegarDescricao() : "";
@@ -117,28 +112,33 @@ string Simulador::criarSaida(Personagem* personagem1, Personagem* personagem2, i
 
 void Simulador::iniciarSimulacao()
 {
-     // Define a semente baseada na hora atual
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
-    int dano = 0;
+    
+    int dano = 0, c = 0;
     Personagem* personagemAtacante;
-    Personagem* personagemDefesa;
+    Personagem* personagemDefensor;
     while(calcularVidaEquipe(1) > 0 && calcularVidaEquipe(2) > 0)
-    {
+    {   
+        c++;
+        // Define a semente baseada no numero de loops do simulador
+        std::srand(c);
         int equipeQueAtaca =  (std::rand() % 2) == 0 ? 1 : 2;
 
         if (equipeQueAtaca == 1)
         {
-            personagemAtacante = proximoPersonagem(equipe1);
-            personagemDefesa = proximoPersonagem(equipe2);
+            personagemAtacante = proximoPersonagem(equipe1, c);
+            personagemDefensor = proximoPersonagem(equipe2, c);
         }
 
         if (equipeQueAtaca == 2)
         {
-            personagemAtacante = proximoPersonagem(equipe2);
-            personagemDefesa = proximoPersonagem(equipe1);
+            personagemAtacante = proximoPersonagem(equipe2, c);
+            personagemDefensor = proximoPersonagem(equipe1, c);
         }
 
-        dano = criarCombate(personagemAtacante, personagemDefesa);
-        cout << criarSaida(personagemAtacante, personagemDefesa, dano) << endl;
+        dano = criarCombate(personagemAtacante, personagemDefensor);
+        if(personagemDefensor->getVida() == 0)
+            if(removerPersonagem(personagemDefensor, equipeQueAtaca == 1 ? 2 : 1) == false)
+                cout << endl << "nao foi possivel remover personagem" << endl;
+        cout << criarSaida(personagemAtacante, personagemDefensor, dano) << endl;
     }
 }
