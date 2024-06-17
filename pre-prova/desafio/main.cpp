@@ -49,5 +49,7 @@ int main() {
     else
         std::cout << "nao v2 v5" << std::endl;
 
+    std::cout << std::endl;
+
     return 0;
 }
